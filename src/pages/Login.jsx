@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { userInfo } from '../redux/actions';
-import { fetchCurrencies } from '../redux/actions/wallet';
 
 class Login extends React.Component {
   state = {
@@ -53,7 +52,6 @@ class Login extends React.Component {
           </label>
           <button disabled={ !isvalid } onClick={ () => {
             dispatch(userInfo(email))
-            dispatch(fetchCurrencies())
             history.push('/carteira')
           } } >Entrar</button>
       </div>
