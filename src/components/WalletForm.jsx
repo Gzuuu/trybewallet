@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
 import { fetchCurrencies, currencyType, fetchValues } from '../redux/actions/wallet';
+import Table from './Table';
 
 class WalletForm extends Component {
   state = {
@@ -113,16 +114,18 @@ class WalletForm extends Component {
               <option value="Saúde">Saúde</option>
             </select>
           </label>
-        </form>
-        <button
-          onClick={ () => {
-            dispatch(fetchValues(expense));
-            this.handleClick();
-          } }
-        >
-          Adicionar despesa
+          <button
+            onClick={ (e) => {
+              e.preventDefault();
+              dispatch(fetchValues(expense));
+              this.handleClick();
+            } }
+          >
+            Adicionar despesa
 
-        </button>
+          </button>
+        </form>
+        <Table />
       </div>
     );
   }
