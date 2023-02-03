@@ -1,10 +1,16 @@
 export const CURRENCY_TYPE = 'CURRENCY_TYPE';
 export const CURRENCY_VALUE = 'CURRENCY_VALUE';
 export const ACTUAL_EXPENSE = 'ACTUAL_EXPENSE';
+export const DELETE_ITEM = 'DELETE_ITEM';
 const API = 'https://economia.awesomeapi.com.br/json/all';
 
 export const currencyType = (payload) => ({
   type: CURRENCY_TYPE,
+  payload,
+});
+
+export const deleteItem = (payload) => ({
+  type: DELETE_ITEM,
   payload,
 });
 
