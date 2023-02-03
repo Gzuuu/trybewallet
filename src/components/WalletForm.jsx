@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { fetchCurrencies, currencyType, fetchValues } from '../redux/actions/wallet';
+import {
+  fetchCurrencies,
+  currencyType,
+  fetchValues,
+  removeState } from '../redux/actions/wallet';
 import Table from './Table';
+
+const INITIAL_STATE = {
+  id: 0,
+  value: 0,
+  description: '',
+  currency: 'USD',
+  method: 'Dinheiro',
+  tag: 'Alimentação',
+  button: 'Adicionar Despesa',
+};
 
 class WalletForm extends Component {
   state = {
-    id: 0,
-    value: 0,
-    description: '',
-    currency: 'USD',
-    method: 'Dinheiro',
-    tag: 'Alimentação',
+    ...INITIAL_STATE,
   };
 
   componentDidMount() {
@@ -24,17 +33,7 @@ class WalletForm extends Component {
     this.setState({ [id]: value });
   };
 
-  handleClick = () => {
-    const { id } = this.state;
-    this.setState({
-      id: id + 1,
-      value: '',
-      description: '',
-    });
-  };
-
-  render() {
-    const { currencies, dispatch } = this.props;
+  handleClick = ({ target }, dispatch) => {
     const { id, value, description, currency, method, tag } = this.state;
     const expense = {
       id,
@@ -44,6 +43,18 @@ class WalletForm extends Component {
       method,
       tag,
     };
+    if (target.innerText === 'Editar Despesa') {
+      dispatch(fetchCurrencies(removeState, { ...expense, id: id - 1 }));
+    }
+    if (target.innerText === 'Adicionar Despesa') {
+      dispatch(fetchValues(expense));
+      this.setState({ ...INITIAL_STATE, id: id + 1 });
+    }
+  };
+
+  render() {
+    const { currencies, dispatch, editable } = this.props;
+    const { value, description, currency, method, tag, button } = this.state;
     return (
       <div>
         <form action="">
@@ -77,6 +88,7 @@ class WalletForm extends Component {
               id="currency"
               data-testid="currency-input"
               onChange={ this.handleChange }
+              defaultValue={ editable ? editable[0].currency : currency }
             >
               { (currencies)
                 ? (
@@ -96,7 +108,12 @@ class WalletForm extends Component {
             Métodos de pagamento:
             {' '}
             {' '}
-            <select data-testid="method-input" id="method" onChange={ this.handleChange }>
+            <select
+              data-testid="method-input"
+              id="method"
+              onChange={ this.handleChange }
+              defaultValue={ editable ? editable[0].method : method }
+            >
               <option value="Dinheiro">Dinheiro</option>
               <option value="Cartão de crédito">Cartão de crédito</option>
               <option value="Cartão de débito">Cartão de débito</option>
@@ -106,7 +123,12 @@ class WalletForm extends Component {
             Categoria:
             {' '}
             {' '}
-            <select id="tag" data-testid="tag-input" onChange={ this.handleChange }>
+            <select
+              id="tag"
+              data-testid="tag-input"
+              onChange={ this.handleChange }
+              defaultValue={ editable ? editable[0].tag : tag }
+            >
               <option value="Alimentação">Alimentação</option>
               <option value="Lazer">Lazer</option>
               <option value="Trabalho">Trabalho</option>
@@ -117,12 +139,10 @@ class WalletForm extends Component {
           <button
             onClick={ (e) => {
               e.preventDefault();
-              dispatch(fetchValues(expense));
-              this.handleClick();
+              this.handleClick(e, dispatch);
             } }
           >
-            Adicionar despesa
-
+            { editable ? 'Editar Despesa' : button }
           </button>
         </form>
         <Table />
@@ -134,11 +154,13 @@ class WalletForm extends Component {
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
   actualValues: state.wallet.actualValues,
+  editable: state.wallet.editable,
 });
 
 WalletForm.propTypes = {
-  currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  dispatch: PropTypes.func.isRequired,
-};
+  currencies: PropTypes.arrayOf(PropTypes.string),
+  dispatch: PropTypes.func,
+  editable: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+}.isRequired;
 
 export default connect(mapStateToProps)(WalletForm);

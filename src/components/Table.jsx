@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { PropTypes } from 'prop-types';
-import { deleteItem } from '../redux/actions/wallet';
+import { deleteItem, editItem } from '../redux/actions/wallet';
 
 class Table extends Component {
   handleClick = ({ target }) => {
     const { dispatch } = this.props;
     const { id } = target;
     dispatch(deleteItem(id));
+  };
+
+  editButtonClick = ({ target }) => {
+    const { dispatch } = this.props;
+    const { id } = target;
+    dispatch(editItem(id));
   };
 
   render() {
@@ -42,7 +48,13 @@ class Table extends Component {
               * Number(expense.value)).toFixed(2)}
               </td>
               <td>
-                <button>Editar</button>
+                <button
+                  data-testid="edit-btn"
+                  id={ expense.id }
+                  onClick={ this.editButtonClick }
+                >
+                  Editar
+                </button>
                 {' '}
                 <button
                   data-testid="delete-btn"
