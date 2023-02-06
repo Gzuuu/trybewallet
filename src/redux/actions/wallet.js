@@ -11,7 +11,7 @@ export const currencyType = (payload) => ({
   payload,
 });
 
-export const editItem = (payload) => ({
+export const editItem = (payload = {}) => ({
   type: EDIT_ITEM,
   payload,
 });

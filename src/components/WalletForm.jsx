@@ -10,7 +10,7 @@ import Table from './Table';
 
 const INITIAL_STATE = {
   id: 0,
-  value: 0,
+  value: '',
   description: '',
   currency: 'USD',
   method: 'Dinheiro',
@@ -88,7 +88,7 @@ class WalletForm extends Component {
               id="currency"
               data-testid="currency-input"
               onChange={ this.handleChange }
-              defaultValue={ editable ? editable[0].currency : currency }
+              defaultValue={ currency }
             >
               { (currencies)
                 ? (
@@ -112,7 +112,7 @@ class WalletForm extends Component {
               data-testid="method-input"
               id="method"
               onChange={ this.handleChange }
-              defaultValue={ editable ? editable[0].method : method }
+              defaultValue={ method }
             >
               <option value="Dinheiro">Dinheiro</option>
               <option value="Cartão de crédito">Cartão de crédito</option>
@@ -127,7 +127,7 @@ class WalletForm extends Component {
               id="tag"
               data-testid="tag-input"
               onChange={ this.handleChange }
-              defaultValue={ editable ? editable[0].tag : tag }
+              defaultValue={ tag }
             >
               <option value="Alimentação">Alimentação</option>
               <option value="Lazer">Lazer</option>
