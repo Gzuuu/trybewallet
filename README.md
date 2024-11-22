@@ -20,7 +20,7 @@
 ## 🧑‍💻 Instalação
 
 1. Clone o repositório:  
-   git clone https://github.com/Gzuuu/trybewallet-project.git  
+   git clone https://github.com/Gzuuu/trybewallet.git  
 
 2. Navegue até a pasta do projeto:  
    cd trybewallet-project  
